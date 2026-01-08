@@ -136,3 +136,38 @@ discord-comment-game/
 - 10 rounds standard (with tiebreaker sudden death if needed)
 - Players joining mid-game become spectators
 - Players leaving mid-game are dropped, but their messages remain in pool
+
+## Development Progress
+
+### Completed
+- [x] **Project Setup** - Vite + React + TypeScript initialized
+- [x] **Dependencies** - Installed Zustand, Tailwind CSS, @discord/embedded-app-sdk
+- [x] **Tailwind Configuration** - Set up with Discord-themed color palette
+- [x] **Project Structure** - Created folders: components, stores, utils, types
+- [x] **Zustand Store** - Game state store with Player, GameMessage, GameState interfaces and actions
+- [x] **Discord SDK Utils** - SDK initialization, user/guild/channel helpers (`src/utils/discord.ts`)
+- [x] **Type Definitions** - TypeScript interfaces in `src/types/game.ts`
+- [x] **Basic App Shell** - Main App component with SDK initialization and loading states
+- [x] **Dev Mode Config** - `src/config.ts` with `VITE_DEV_MODE` support (1 player minimum in dev)
+- [x] **Vite Config** - Cloudflare tunnel hosts allowed for local Discord testing
+- [x] **OAuth Token Exchange** - Vite middleware for Discord OAuth token exchange (`vite.config.ts`)
+- [x] **Lobby Screen UI** - PlayerCard, PlayerCardSkeleton, and Lobby components
+- [x] **Discord SDK Integration** - Full OAuth flow, participant fetching, host detection
+- [x] **useDiscordUsers Hook** - React hook for managing Discord users and authentication
+
+### In Progress
+- [ ] Game round flow implementation
+
+### Not Started
+- [ ] Message fetching from Discord channel (requires bot with message history permissions)
+- [ ] Message filtering logic (word count, content type, etc.)
+- [ ] Name redaction system
+- [ ] Phase 1: Initial guess UI
+- [ ] Phase 2: Multiple choice UI
+- [ ] Timer component
+- [ ] Scoring system implementation
+- [ ] Round summary screen
+- [ ] End game / winner screen
+- [ ] Tiebreaker sudden death mode
+- [ ] Player join/leave handling
+- [ ] Real-time state sync between players

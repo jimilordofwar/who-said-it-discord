@@ -5,7 +5,9 @@
       "Bash(node --version:*)",
       "Bash(npm init -y)",
       "Bash(npm install)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(cat:*)",
+      "Bash(ls:*)"
     ],
     "deny": [],
     "ask": []

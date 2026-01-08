@@ -1,41 +1,29 @@
-import { useEffect, useState } from 'react'
 import { useGameStore } from './stores/gameStore'
-import { initializeDiscordSDK } from './utils/discord'
+import { useDiscordUsers } from './hooks/useDiscordUsers'
+import { Lobby } from './components/Lobby'
+import { isDev } from './config'
 
 function App() {
-  const [isSDKReady, setIsSDKReady] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const { players, phase } = useGameStore()
+  const { phase, startGame } = useGameStore()
+  const {
+    currentUser,
+    voiceChannelUsers,
+    isLoading,
+    error,
+    isHost,
+  } = useDiscordUsers()
 
-  useEffect(() => {
-    initializeDiscordSDK()
-      .then(() => {
-        setIsSDKReady(true)
-        console.log('Discord SDK initialized successfully')
-      })
-      .catch((err) => {
-        console.error('Failed to initialize Discord SDK:', err)
-        setError('Failed to connect to Discord. Please make sure you\'re running this app within Discord.')
-      })
-  }, [])
+  const handleStartGame = () => {
+    console.log('Starting game...')
+    startGame()
+  }
 
   if (error) {
     return (
       <div className="min-h-screen bg-discord-darker flex items-center justify-center p-4">
         <div className="bg-discord-dark rounded-lg p-6 max-w-md">
           <h2 className="text-red-500 text-xl font-bold mb-2">Error</h2>
-          <p className="text-discord-light">{error}</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (!isSDKReady) {
-    return (
-      <div className="min-h-screen bg-discord-darker flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-pulse-slow text-discord-primary text-4xl mb-4">🎮</div>
-          <p className="text-discord-light">Connecting to Discord...</p>
+          <p className="text-discord-light">{error.message}</p>
         </div>
       </div>
     )
@@ -51,23 +39,28 @@ function App() {
           <p className="text-discord-light">
             A game of channel history and memory
           </p>
+          {isDev && (
+            <span className="text-xs text-discord-muted">(Dev mode)</span>
+          )}
         </header>
 
         <main className="bg-discord-dark rounded-lg p-6">
-          <div className="text-center">
-            <h2 className="text-2xl font-semibold mb-4">Welcome!</h2>
-            <p className="text-discord-light mb-4">
-              Current phase: <span className="text-discord-primary font-medium">{phase}</span>
-            </p>
-            <p className="text-discord-light">
-              Players connected: <span className="text-discord-primary font-medium">{players.length}</span>
-            </p>
-            {players.length < 3 && (
-              <p className="text-yellow-400 mt-4">
-                Waiting for at least 3 players to join...
+          {phase === 'lobby' && (
+            <Lobby
+              players={voiceChannelUsers}
+              isHost={isHost}
+              currentUserId={currentUser?.id}
+              onStartGame={handleStartGame}
+              isLoading={isLoading}
+            />
+          )}
+          {phase !== 'lobby' && (
+            <div className="text-center">
+              <p className="text-discord-light">
+                Game phase: <span className="text-discord-primary font-medium">{phase}</span>
               </p>
-            )}
-          </div>
+            </div>
+          )}
         </main>
       </div>
     </div>
